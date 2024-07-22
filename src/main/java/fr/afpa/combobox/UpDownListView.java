@@ -54,4 +54,13 @@ public class UpDownListView<T> extends VBox {
         return listView;
     }
 
+    public Button getUpBtn() {
+        return upBtn;
+    }
+
+    public Button getDownBtn() {
+        return downBtn;
+    }
+
+
 }

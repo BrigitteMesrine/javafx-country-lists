@@ -1,10 +1,12 @@
 package fr.afpa.combobox;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -104,14 +106,9 @@ public class App extends Application {
         });
 
         countryComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            if (newValue != null) {
-                addButton.setDisable(false);
-            } else {
-                addButton.setDisable(true);
-            }
-         }); 
+            addButton.setDisable(newValue == null);
+        });
 
-        
         // event handlers for Buttons
         addButton.setOnAction(event -> {
             // checks if ComboBox selected item is of Country class (avoids null being
@@ -147,6 +144,26 @@ public class App extends Application {
             comboBoxList.setAll(countries);
         });
 
+        // why is these functions not working while selectedCountryIndex is outside of it ?
+        upDownListView.getUpBtn().setOnAction(event -> {
+            int selectedCountryIndex = upDownListView.getListView().getSelectionModel().getSelectedIndex();
+            if (selectedCountryIndex > 0) {
+                Collections.swap(upDownListView.getListView().getItems(), selectedCountryIndex, (selectedCountryIndex - 1));
+                upDownListView.getListView().getSelectionModel().selectPrevious();
+            }
+        });
+        upDownListView.getDownBtn().setOnAction(event -> {
+            int selectedCountryIndex = upDownListView.getListView().getSelectionModel().getSelectedIndex();
+            if (selectedCountryIndex < upDownListView.getListView().getItems().size()) {
+                Collections.swap(upDownListView.getListView().getItems(), selectedCountryIndex, (selectedCountryIndex + 1));
+                upDownListView.getListView().getSelectionModel().selectNext();
+            }
+        });
+
+        exitButton.setOnAction(event -> {
+            Platform.exit();
+        });
+
         Scene scene = new Scene(gridPane);
         stage.setScene(scene);
         stage.show();
@@ -167,6 +184,3 @@ public class App extends Application {
     }
 
 }
-
-// big questions
-// how to listen to 
